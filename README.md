@@ -8,8 +8,7 @@ A comprehensive AI-powered Streamlit application that uses YOLOv8 to detect peop
 
 ### Core Detection Capabilities
 - **👥 Person Detection**: Advanced YOLOv8-based person identification
-- **🪖 Helmet Detection**: AI + computer vision helmet compliance checking
-- **😷 Face Mask Detection**: Health safety mask verification
+- **🪖 Helmet Detection**: AI + computer vision helmet compliance checking (can be replaced by fine-tuned YOLO model in production)
 - **🦺 Safety Vest Detection**: High-visibility vest identification
 - **📊 Compliance Analytics**: Detailed reporting and statistics
 
@@ -41,18 +40,18 @@ A comprehensive AI-powered Streamlit application that uses YOLOv8 to detect peop
 1. **Clone or download the project**
 ```bash
 git clone <repository-url>
-cd safety-compliance-detection
+cd safety-object-detection
 ```
 
 2. **Create virtual environment (recommended)**
 ```bash
-python -m venv safety_env
+python -m venv venv
 
 # Windows
-safety_env\Scripts\activate
+venv\Scripts\activate
 
 # macOS/Linux
-source safety_env/bin/activate
+source venv/bin/activate
 ```
 
 3. **Install dependencies**
@@ -108,7 +107,7 @@ Visual Annotation → Report Generation
 #### 1. AI-Based Detection (Primary)
 - **YOLOv8 Models**: Pretrained object detection
 - **Person Detection**: COCO dataset person class
-- **Equipment Classification**: Custom detection logic
+- **Equipment Classification**: Custom detection logic (currently rule-based for helmet/vest)
 
 #### 2. Computer Vision Enhancement (Secondary)
 - **Color-based Detection**: HSV color space analysis
@@ -122,12 +121,12 @@ Visual Annotation → Report Generation
 
 ### Compliance Scoring Algorithm
 ```python
-compliance_rate = (helmet_detected + mask_detected + vest_detected) / 3
+compliance_rate = (helmet_detected + vest_detected) / 2
 
 Status Classification:
-- Fully Compliant: 100% (3/3 items)
-- Partial Compliance: 33-99% (1-2/3 items)  
-- Violation: 0-33% (0-1/3 items)
+- Fully Compliant: 100% (2/2 items)
+- Partial Compliance: 50% (1/2 items)  
+- Violation: 0% (0/2 items)
 ```
 
 ## 🎨 Customization
@@ -154,7 +153,6 @@ def detect_new_equipment(person_roi):
 ```python
 compliance_items = {
     'helmet': helmet_detected,
-    'mask': mask_detected,
     'vest': vest_detected,
     'new_equipment': new_equipment_detected  # Add here
 }
@@ -285,16 +283,20 @@ async def detect_compliance(image: UploadFile):
 
 ## 📄 File Structure
 ```
-safety-compliance-detection/
-├── app.py                 # Main Streamlit application
-├── utils.py              # Detection utilities and helpers
-├── requirements.txt      # Python dependencies
-├── README.md            # This documentation
-├── run_instructions.txt # Quick start guide
-├── models/              # Custom model storage (optional)
-├── data/               # Sample images and test data
-├── exports/            # Generated reports and exports
-└── logs/              # Application logs
+project/
+├── app.py                     # Main Streamlit application
+├── utils.py                   # SafetyDetector class and annotation utilities
+├── config.py                  # Configuration settings
+├── demo_images_generator.py  # Script for generating synthetic demo scenarios
+├── test_detection.py          # Test script for validating detection logic
+├── yolov8n.pt                 # YOLOv8 model file
+├── sample_data/               # Demo images and result samples
+│   └── README.md
+├── venv/                      # Virtual environment
+├── requirements.txt           # Python dependencies
+├── package.json               # Frontend configuration (if using Vite + Tailwind)
+├── index.html                 # Frontend HTML entry
+└── README.md                  # You're here!
 ```
 
 ## 🤝 Contributing
@@ -306,23 +308,10 @@ safety-compliance-detection/
 4. Add tests for new functionality
 5. Submit a pull request
 
-### Code Style
-- Follow PEP 8 guidelines
-- Use type hints where possible
-- Add docstrings for functions
-- Comment complex logic sections
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🆘 Support
-
-### Getting Help
-1. **Documentation**: Check this README first
-2. **Issues**: Create GitHub issues for bugs
-3. **Discussions**: Use GitHub discussions for questions
-4. **Email**: Contact support for enterprise inquiries
+This project is licensed under the MIT License
 
 ### System Requirements
 - **Minimum**: Python 3.8, 4GB RAM, 2GB storage
